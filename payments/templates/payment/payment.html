@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% block hover_css %}
+    <style>
+        .payment-method-select {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            appearance: none; /* Xóa bỏ dấu mũi tên mặc định */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: relative;
+        }
+
+        .payment-method-select:focus {
+            background-color: #fff; /* Màu nền khi chọn */
+            outline: none; /* Xóa bỏ đường viền khi chọn */
+        }
+
+        /* Dấu mũi tên tùy chỉnh */
+        .payment-method-select::after {
+            content: '\25BC'; /* Dấu mũi tên đi xuống */
+            position: absolute;
+            right: 20px; /* Căn phải 20px */
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none; /* Đảm bảo dấu mũi tên không gây cản trở việc chọn */
+        }
+
+        .address-box {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .address-box.active {
+            border-color: green;
+        }
+
+        .order-summary {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .order-summary img {
+            height: 50px;
+            width: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2>Checkout</h2>
+    <div class="row">
+        <!-- Left section -->
+        <div class="col-12 col-lg-8">
+            <h5>Add delivery address</h5>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="d-flex flex-wrap gap-3">
+                    {% for address in addresses %}
+                        <div class="address-box {% if address.is_default %}active{% endif %}">
+                            <label class="fw-bold">
+                                <input type="radio" name="address" value="{{ address.id }}"
+                                    {% if address.is_default %}checked{% endif %}
+                                    class="form-check-input">
+                                {{ address.label|default:"Address" }}
+                            </label>
+                            <p>
+                                {{ request.user.first_name }} {{ request.user.last_name }}<br>
+                                {{ address.street }}<br>
+                                {{ address.city }}, {{ address.state }} {{ address.zip_code }}<br>
+                                {{ address.phone }}
+                            </p>
+
+                            {% if address.is_default %}
+                                <p class="text-danger">Default address</p>
+                            {% else %}
+                                <p class="text-success">Set as Default</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'add_address' %}" class="btn btn-outline-success">Add a new address</a>
+
+                <!-- Accordion -->
+                <div class="accordion mt-4" id="checkoutOptions">
+                    <!-- Delivery Time Section -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#deliveryTime">
+                                Delivery time
+                            </button>
+                        </h2>
+                        <div id="deliveryTime" class="accordion-collapse collapse" data-bs-parent="#checkoutOptions">
+                            <div class="accordion-body">
+                                Choose a suitable delivery time...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Instructions Section -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#deliveryInstructions">
+                                Delivery instructions
+                            </button>
+                        </h2>
+                        <div id="deliveryInstructions" class="accordion-collapse collapse" data-bs-parent="#checkoutOptions">
+                            <div class="accordion-body">
+                                Add specific delivery notes...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Section -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentMethod">
+                                Payment Method
+                            </button>
+                        </h2>
+                        <div id="paymentMethod" class="accordion-collapse collapse" data-bs-parent="#checkoutOptions">
+                            <div class="accordion-body">
+                                <select class="payment-method-select" name="payment_method">
+                                    <option disabled selected>Payment Method</option>
+                                    <option value="cash_on_delivery">Qua tiền mặt</option>
+                                    <option value="bank_transfer">Chuyển khoản</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- Thêm trường nhập cho số điện thoại -->
+<div class="mb-3">
+    <label for="phone" class="form-label">Số điện thoại</label>
+    <input type="text" class="form-control" id="phone" name="phone" value="{{ request.user.profile.phone }}" required>
+</div>
+
+
+                <button type="submit" class="btn btn-primary mt-3">Đặt hàng</button>
+            </form>
+        </div>
+
+        <!-- Right section -->
+        <div class="col-12 col-lg-4">
+            <div class="order-summary">
+                <h2>Thanh toán</h2>
+
+                <h5>Thông tin người dùng:</h5>
+                <p><strong>{{ user.username }}</strong> - {{ user.email }}</p>
+
+                <h5>Giỏ hàng:</h5>
+                <ul class="list-group mb-3">
+                    {% for item in cart %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            {{ item.name }} x{{ item.quantity }}
+                            <span>₫{{ item.price|floatformat:0 }}</span>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">Giỏ hàng trống</li>
+                    {% endfor %}
+                </ul>
+
+                <h4 class="text-end">Tổng tiền: ₫{{ total|floatformat:0 }}</h4>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+<!-- orders/templates/orders/order.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Order Page</h1>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <h3>Order Information</h3>
+    {{ order_form.as_p }}
+
+    <h3>Shipping Address</h3>
+    {{ address_form.as_p }}
+
+    <button type="submit">Place Order</button>
+  </form>
+
+  <h3>Your Cart</h3>
+  <ul>
+    {% for item in cart_items %}
+      <li>{{ item.name }} - {{ item.quantity }} x {{ item.price }}</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

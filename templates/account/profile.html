@@ -1,0 +1,213 @@
+{% extends "Base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Profile" %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    body {
+        background: #f6f8fb;
+    }
+    .profile-container {
+        display: flex;
+        gap: 32px;
+        margin-top: 40px;
+    }
+    .profile-sidebar {
+        background: linear-gradient(135deg, #e3f0ff 70%, #fff 100%);
+        border-radius: 24px;
+        box-shadow: 0 4px 24px rgba(52,152,219,0.08);
+        color: #333;
+        padding: 36px 24px 28px 24px;
+        min-width: 320px;
+        max-width: 340px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border: 1.5px solid #e74c3c22;
+    }
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #e74c3c;
+        margin-bottom: 16px;
+        background: #fff;
+        box-shadow: 0 2px 8px #e3f0ff;
+    }
+    .profile-name {
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #e74c3c;
+        margin-bottom: 4px;
+    }
+    .profile-role {
+        font-size: 1.1rem;
+        color: #3498db;
+        margin-bottom: 12px;
+    }
+    .profile-info-list {
+        text-align: left;
+        margin: 24px 0 0 0;
+        padding: 0;
+        list-style: none;
+    }
+    .profile-info-list li {
+        margin-bottom: 16px;
+        font-size: 1.05rem;
+        display: flex;
+        align-items: center;
+        color: #444;
+    }
+    .profile-info-list i {
+        color: #e74c3c;
+        margin-right: 12px;
+        font-size: 1.2rem;
+        min-width: 22px;
+        text-align: center;
+    }
+    .profile-social {
+        margin-top: 18px;
+        font-size: 1.2rem;
+    }
+    .profile-social i {
+        color: #e74c3c;
+        margin-right: 10px;
+        transition: color 0.2s;
+    }
+    .profile-social i:hover {
+        color: #3498db;
+    }
+    .profile-main {
+        flex: 1;
+        min-width: 0;
+    }
+    .profile-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 2px 12px rgba(231,76,60,0.08);
+        margin-bottom: 32px;
+        padding: 32px 36px 28px 36px;
+        border-left: 6px solid #e74c3c;
+        border-right: 6px solid #e3f0ff;
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .profile-card:hover {
+        box-shadow: 0 8px 32px rgba(52,152,219,0.15);
+        transform: translateY(-4px) scale(1.01);
+    }
+    .profile-info-icon {
+        color: #e74c3c;
+        margin-right: 10px;
+    }
+    .order-card {
+        border-left: 6px solid #e74c3c;
+        box-shadow: 0 4px 16px rgba(52,152,219,0.08);
+        margin-bottom: 24px;
+        animation: fadeInUp 0.7s;
+        transition: box-shadow 0.3s, transform 0.3s;
+        background: #fff;
+        border-radius: 16px;
+        padding: 24px 28px;
+    }
+    .order-card:hover {
+        box-shadow: 0 8px 32px rgba(231,76,60,0.15);
+        transform: translateY(-4px) scale(1.01);
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .order-badge {
+        background: #e74c3c;
+        color: #fff;
+        border-radius: 12px;
+        padding: 4px 12px;
+        font-size: 0.95rem;
+        margin-right: 8px;
+        margin-bottom: 4px;
+        display: inline-block;
+        box-shadow: 0 2px 8px rgba(231,76,60,0.08);
+        transition: background 0.2s;
+    }
+    .order-badge:hover {
+        background: #c0392b;
+    }
+    .order-info-icon {
+        color: #e74c3c;
+        margin-right: 6px;
+    }
+    .order-status {
+        font-weight: bold;
+        color: #e74c3c;
+        letter-spacing: 1px;
+    }
+    .order-total {
+        color: #3498db;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container profile-container">
+    <div class="profile-sidebar">
+        <img src="https://ui-avatars.com/api/?name={{ user.get_full_name|default:user.username }}&background=e74c3c&color=fff&size=128" class="profile-avatar" alt="Avatar">
+        <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
+        <div class="profile-role">Khách hàng</div>
+        <ul class="profile-info-list">
+            <li><i class="fa-solid fa-envelope"></i> {{ user.email }}</li>
+            <li><i class="fa-solid fa-calendar"></i> Ngày tạo: {{ user.date_joined|date }}</li>
+            <li><i class="fa-solid fa-clock"></i> Đăng nhập gần nhất: {{ user.last_login|date }}</li>
+        </ul>
+        {% if user.socialaccount_set.all %}
+            <div class="profile-social mt-3">
+                <i class="fa-brands fa-google"></i>
+                {# Thêm các mạng xã hội khác nếu cần #}
+            </div>
+        {% endif %}
+    </div>
+    <div class="profile-main">
+        <div class="profile-card">
+            <h3 style="color:#e74c3c"><i class="fa-solid fa-user profile-info-icon"></i> About Me</h3>
+            <hr>
+            <p><i class="fa-solid fa-user profile-info-icon"></i><strong>Username:</strong> {{ user.username }}</p>
+            <p><i class="fa-solid fa-envelope profile-info-icon"></i><strong>Email:</strong> {{ user.email }}</p>
+            <p><i class="fa-solid fa-calendar profile-info-icon"></i><strong>Ngày tạo:</strong> {{ user.date_joined|date }}</p>
+            <p><i class="fa-solid fa-clock profile-info-icon"></i><strong>Đăng nhập gần nhất:</strong> {{ user.last_login|date }}</p>
+        </div>
+        <h3 class="mb-3" style="color:#e74c3c"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử đơn hàng</h3>
+        {% if orders %}
+            {% for order in orders %}
+                <div class="order-card animate__animated animate__fadeInUp">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span><i class="fa-solid fa-receipt order-info-icon"></i> <strong>Mã đơn hàng:</strong> #{{ order.id }}</span>
+                        <span class="order-status"><i class="fa-solid fa-circle-check"></i> {{ order.status }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <i class="fa-solid fa-calendar-days order-info-icon"></i> <strong>Thời gian đặt:</strong> {{ order.created_at|date:"d/m/Y H:i" }}<br>
+                        <i class="fa-solid fa-user order-info-icon"></i> <strong>Khách hàng:</strong> {{ order.user.get_full_name|default:order.user.username }} ({{ order.user.email }})<br>
+                        {# Nếu có trường địa chỉ, bỏ comment dòng dưới #}
+                        {# <i class="fa-solid fa-location-dot order-info-icon"></i> <strong>Địa chỉ:</strong> {{ order.address }}<br> #}
+                    </div>
+                    <div class="mb-2">
+                        <i class="fa-solid fa-money-bill-wave order-info-icon"></i> <strong>Tổng tiền:</strong> <span class="order-total">{{ order.total_amount }}</span>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-boxes-stacked order-info-icon"></i> <strong>Sản phẩm:</strong>
+                        <div>
+                            {% for item in order.items.all %}
+                                <span class="order-badge">{{ item.product.name }} x{{ item.quantity }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Bạn chưa có đơn hàng nào.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

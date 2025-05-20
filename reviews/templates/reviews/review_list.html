@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Đánh giá sản phẩm: {{ product.name }}</h2>
+    
+    <!-- Form đánh giá -->
+    {% if user.is_authenticated %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4>Viết đánh giá của bạn</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Đánh giá của bạn:</label>
+                        <div class="rating">
+                            {% for i in "54321" %}
+                            <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}" required>
+                            <label for="star{{ i }}">★</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nhận xét của bạn:</label>
+                        {{ form.comment }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Vui lòng <a href="{% url 'login' %}">đăng nhập</a> để viết đánh giá.
+        </div>
+    {% endif %}
+
+    <!-- Danh sách đánh giá -->
+    <div class="reviews-list">
+        <h3>Đánh giá từ khách hàng</h3>
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">{{ review.user.username }}</h5>
+                            <div class="rating-display">
+                                {% for i in "12345" %}
+                                    {% if i|add:"0" <= review.rating %}
+                                        <span class="text-warning">★</span>
+                                    {% else %}
+                                        <span class="text-muted">☆</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="card-text">{{ review.comment }}</p>
+                        <small class="text-muted">
+                            {{ review.created_at|date:"d/m/Y H:i" }}
+                            {% if review.verified_purchase %}
+                                <span class="badge badge-success">Đã mua hàng</span>
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    cursor: pointer;
+    font-size: 30px;
+    color: #ddd;
+    padding: 5px;
+}
+
+.rating input:checked ~ label,
+.rating label:hover,
+.rating label:hover ~ label {
+    color: #ffd700;
+}
+
+.rating-display {
+    font-size: 20px;
+}
+</style>
+{% endblock %} 

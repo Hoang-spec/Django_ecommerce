@@ -1,0 +1,358 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Trang web Django{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    {% block extra_css %}{% endblock %}
+    {% block hover_css %}{% endblock %}
+    <style>     
+        .nav2{
+
+            height: 50px;
+            align-items: center;
+            width: 80%;
+        }
+        .nav2 .nav21{
+            width: 50%;
+            margin-top: 15px;
+            display: flex;
+
+        }
+        .nav2 .nav22{
+            width: 50%;
+        }
+        .nav2 .nav21 a{
+            color: black;
+            text-align: center;
+            justify-items: center;
+            padding-top: 5px ;
+        }
+
+        .nav2 .nav21 a:hover{
+            color: #ffffff;
+            justify-items: center;
+            padding-top: 5px;
+            background-color: #ff0606;
+            height: 30px;
+            text-align: center;
+            width: 100px;
+            border-radius: 4px;
+        }
+
+
+        .footer {
+            background-color: #f5f5f5;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            font-size: 0.8rem;
+        }
+        .footer-links {
+            list-style: none;
+            padding-left: 0;
+        }
+        .footer-links li {
+            margin-bottom: 5px;
+        }
+        .footer-links a {
+            text-decoration: none;
+            color: #555;
+        }
+        .payment-icons img {
+            margin-right: 5px;
+            height: 20px; /* Điều chỉnh kích thước icon */
+        }
+        .shipping-icons img {
+            margin-right: 5px;
+            height: 20px;
+        }
+        .social-icons a {
+            margin-right: 10px;
+            font-size: 1.2rem; /* Kích thước icon mạng xã hội */
+            color: #333;
+        }
+        .app-download img {
+            height: 50px; /* Kích thước QR code và icon app */
+            margin-right: 5px;
+        }
+           /* Tùy chỉnh để giống hơn */
+        .navbar {
+
+            font-size: 0.8rem;
+        }
+        .navbar-brand {
+            padding-top: 0.2rem;
+            padding-bottom: 0.2rem;
+        }
+        .btn-custom {
+            background-color:rgb(94, 11, 71); /* Màu đỏ đậm hơn */
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            margin-right: 0.5rem;
+        }
+        .btn-custom:hover {
+            background-color:rgb(118, 0, 187); /* Màu đỏ đậm hơn khi hover */
+        }
+        .form-control {
+            border-radius: 0.25rem;
+        }
+        .nav-link {
+            color: white;
+        }
+        .nav-link:hover {
+            color: #ddd;
+        }
+            .autocomplete-suggestions {
+                margin-top: 50px;
+                position: absolute;
+                background-color: white;
+                border: 1px solid #ddd;
+                z-index: 999;
+                width: 100%;
+                max-height: 200px;
+                overflow-y: auto;
+                color: black;
+            }
+            .autocomplete-suggestion {
+                padding: 8px;
+                cursor: pointer;
+            }
+            .autocomplete-suggestion:hover {
+                background-color: #f0f0f0;
+            }
+            .Login_base{
+                display: flex;
+            }
+            .Login_base svg{
+                width: 30px;
+                margin: 10px;
+                height: 30px;
+
+            }
+            .login_base{
+                width: 100px;
+                height: 40px;
+                padding-left: 20px;
+                display: flex;
+                justify-items: center;
+                align-items: center;
+
+                text-decoration: none;
+                text-align: center;
+                border-radius: 4px;
+                border: 1px solid #F8F9FA;
+                margin-left: 10px;
+            }
+            .login_base:hover{
+                color: black;
+            }
+    </style>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark d-flex flex-column">
+            <div class="container">
+            <div style="width: 10%;" class="logo">
+                <img style="width : 50px; height : 50px" src="https://static.vecteezy.com/system/resources/previews/021/622/052/original/e-commerce-logo-templates-vector.jpg"/>
+            </div>
+                    <form style="width: 50%;" class="d-flex flex-grow-1 mx-2 position-relative" action="/search/" method="get" autocomplete="off">
+                        <input style="width: 50%;" id="searchInput" class="form-control me-2" type="search" name="q" placeholder="Bạn cần tìm gì?" aria-label="Search">
+                        <button style="background-color: red" class="btn btn-outline-light" type="submit">
+                            <i class="bi bi-search"> Search</i>
+                        </button>
+                    </form>
+                <div class="d-flex">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            {% if user.is_authenticated %}
+                                <div class="Login_base">
+                                    <a href="{% url 'account_profile' %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                        </svg>
+                                    </a>
+                                <form method="POST" action="{% url 'account_logout' %}">
+                                    {% csrf_token %}
+                                    <button style="background-color: #F8F9FA">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                          <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z"/>
+                                          <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                                </div>
+
+                            {% else %}
+                                <div class="Login_base">
+                                <a class="login_base" href="{% url 'account_login' %}">Đăng nhập</a>
+                                <a class="login_base" href="{% url 'accounts:register' %}">Đăng ký</a>
+                                </div>
+                            {% endif %}
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav2">
+                <div class="nav21">
+                    <a style="text-decoration: none; font-size: 13px; width : 100px"  href="/">Home</a>
+                    <a style="text-decoration: none; font-size: 13px; width : 100px"  href="cart/"> Cart</a>
+                    <a style="text-decoration: none; font-size: 13px; width : 100px"  href="cart/"> Dashboard</a>
+                    <a style="text-decoration: none; font-size: 13px; width : 100px"  href="cart/"> Docs</a>
+                    <a style="text-decoration: none; font-size: 13px; width : 100px"  href="Contact/"> Contact</a>
+                    <a style="text-decoration: none; font-size: 13px; width : 100px"  href="cart/"> Support</a>
+                </div>
+                <div class="nav22">
+
+                </div>
+            </div>
+        </nav>
+    </header>
+    <hr>
+
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h5>DỊCH VỤ KHÁCH HÀNG</h5>
+                <ul class="footer-links">
+                    <li><a href="#">Trung Tâm Trợ Giúp</a></li>
+                    <li><a href="#">Shopee Blog</a></li>
+                    <li><a href="#">Shopee Mall</a></li>
+                    <li><a href="#">Hướng Dẫn Mua Hàng</a></li>
+                    <li><a href="#">Hướng Dẫn Bán Hàng</a></li>
+                    <li><a href="#">Về Shopee</a></li>
+                    <li><a href="#">Shopee Xu</a></li>
+                    <li><a href="#">Bán Hàng Kênh Người Bán</a></li>
+                    <li><a href="#">Flash Sale</a></li>
+                    <li><a href="#">Chương Trình Tiếp Thị Liên Kết</a></li>
+                    <li><a href="#">Liên Hệ Shopee</a></li>
+                    <li><a href="#">Gói Shopee Affiliate</a></li>
+                    <li><a href="#">Chính Sách Khách Hàng</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>SHOPEE VIỆT NAM</h5>
+                <ul class="footer-links">
+                    <li><a href="#">Về Shopee</a></li>
+                    <li><a href="#">Tuyển Dụng</a></li>
+                    <li><a href="#">Điều Khoản Shopee</a></li>
+                    <li><a href="#">Chính Sách Bảo Mật</a></li>
+                    <li><a href="#">Kênh Người Bán</a></li>
+                    <li><a href="#">Flash Sale</a></li>
+                    <li><a href="#">Chương Trình Tiếp Thị Liên Kết</a></li>
+                    <li><a href="#">Liên Hệ Truyền Thông</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                <h5>THANH TOÁN</h5>
+                <div class="payment-icons">
+
+                    </div>
+                <div class="shipping-icons mt-3">
+                    <h5>ĐƠN VỊ VẬN CHUYỂN</h5>
+
+                    </div>
+            </div>
+            <div class="col-md-2">
+                <h5>THEO DÕI SHOPEE</h5>
+                <div class="social-icons">
+                    <a href="#" class="text-decoration-none"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-decoration-none"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-decoration-none"><i class="bi bi-linkedin"></i></a>
+                    </div>
+            </div>
+            <div class="col-md-2">
+                <h5>TẢI ỨNG DỤNG SHOPEE</h5>
+                <div class="app-download">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" alt="QR Code">
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <span>© 2023 Shopee. Tất cả các quyền được bảo lưu.</span>
+                <br>
+                <span>Quốc gia & Khu vực: Singapore, Indonesia, Thái Lan, Malaysia, Việt Nam, Philippines, Brazil, Mexico, Colombia, Chile, Đài Loan</span>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <a href="#" class="text-decoration-none text-muted">CHÍNH SÁCH BẢO MẬT</a> |
+                <a href="#" class="text-decoration-none text-muted">QUY CHẾ HOẠT ĐỘNG</a> |
+                <a href="#" class="text-decoration-none text-muted">ĐIỀU KHOẢN DỊCH VỤ</a> |
+                <a href="#" class="text-decoration-none text-muted">CHÍNH SÁCH BẢO HÀNH</a>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <span>Công ty TNHH Shopee</span><br>
+                <span>Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, 29 Liễu Giai, Phường Ngọc Khánh, Quận Ba Đình, Thành phố Hà Nội, Việt Nam.</span><br>
+                <span>Giấy chứng nhận Đăng ký Kinh doanh số 0106773786 do Sở Kế hoạch và Đầu tư TP.Hà Nội cấp ngày 10/02/2015.</span><br>
+                <span>© 2015 - Bản quyền thuộc về Công ty TNHH Shopee</span>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const suggestionsBox = document.getElementById("suggestions");
+
+    
+    const allProducts = [
+        {% for p in all_products %}
+            "{{ p.name }}"{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    searchInput.addEventListener("input", function () {
+        const query = this.value.toLowerCase(); 
+        suggestionsBox.innerHTML = "";
+
+        if (query.length < 1) return;
+
+        const filtered = allProducts.filter(name => name.toLowerCase().includes(query)); 
+
+        filtered.slice(0, 5).forEach(name => {
+            const div = document.createElement("div");
+            div.className = "autocomplete-suggestion";
+            div.textContent = name;
+            div.onclick = () => {
+                searchInput.value = name;
+                suggestionsBox.innerHTML = "";
+            };
+            suggestionsBox.appendChild(div);
+        });
+    });
+
+    document.addEventListener("click", function (e) {
+        if (!suggestionsBox.contains(e.target) && e.target !== searchInput) {
+            suggestionsBox.innerHTML = "";
+        }
+    });
+</script>
+{% block script %}{% endblock %}
+</body>
+</html>

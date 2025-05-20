@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block hover_css %}
+    <style>
+   .cart-item img {
+        max-width: 100px;
+        height: auto;
+    }
+    .quantity-input {
+        width: 50px;
+    }
+    .cart-summary {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+    }
+    /* Thêm style cho coupon message */
+    .coupon-message {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+
+    </style>
+{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2>🛒 Giỏ hàng</h2>
+
+    {% if cart_items %}
+    <div class="container py-5">
+    <h1 class="mb-5">Your Shopping Cart</h1>
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Cart Items -->
+            <div class="card mb-4">
+                <div class="card-body">
+                     {% for item in cart_items %}
+
+                    <div class="row cart-item">
+                        <div class="col-md-3">
+                            <img src="{{ item.product.picture }}" alt="Product 2" class="img-fluid rounded">
+                        </div>
+                        <div class="col-md-5">
+                            <h5 class="card-title">{{ item.product.name }}</h5>
+                            <p class="text-muted">{{ item.product.type }}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group">
+                                <a href="{% url 'cart:decrease_quantity' item.product.id %}" class="btn btn-outline-secondary btn-sm">-</a>
+                                <input style="max-width:100px" type="text" class="form-control form-control-sm text-center quantity-input" value="{{ item.quantity }}" readonly>
+                                <a href="{% url 'cart:increase_quantity' item.product.id %}" class="btn btn-outline-secondary btn-sm">+</a>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <p class="fw-bold">{{ item.product.price }}</p>
+                            <form method="post" action="{% url 'cart:remove_from_cart' item.product.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                            </form>
+                        </div>
+                    </div>
+                         <hr>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Continue Shopping Button -->
+            <div class="text-start mb-4">
+                <a href="/" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <!-- Cart Summary -->
+            <!-- Trong phần Cart Summary -->
+            <div class="card cart-summary">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Tổng đơn hàng</h5>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Tạm tính</span>
+                        <span>₫{{ total|floatformat:0 }}</span>
+                    </div>
+
+                    {% if coupon %}
+                    <div class="d-flex justify-content-between mb-3 text-success">
+                        <span>Giảm giá ({{ coupon.discount }}%)</span>
+                        <span>-₫{{ discount|floatformat:0 }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Phí vận chuyển</span>
+                        <span>₫10,000</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Thuế (VAT)</span>
+                        <span>₫{{ tax|floatformat:0 }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Tổng cộng</strong>
+                        <strong>₫{{ total_after_discount|floatformat:0 }}</strong>
+                    </div>
+                    <form action="{% url 'checkout' %}" method="get">
+                        <button type="submit" class="btn btn-success w-100">Thanh toán</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Promo Code -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Mã giảm giá</h5>
+                    <form action="{% url 'cart:coupon_apply' %}" method="post" class="mb-3">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="text" name="code" class="form-control" placeholder="Nhập mã giảm giá">
+                            <button class="btn btn-outline-secondary" type="submit">Áp dụng</button>
+                        </div>
+                    </form>
+
+                    {% if coupon %}
+                    <div class="alert alert-success py-2">
+                        Đã áp dụng mã "{{ coupon.code }}" (giảm {{ coupon.discount }}%)
+                        <a href="{% url 'cart:coupon_remove' %}" class="float-end text-danger">Xóa</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {% else %}
+    <p>Giỏ hàng của bạn đang trống.</p>
+    {% endif %}
+</div>
+{% endblock %}

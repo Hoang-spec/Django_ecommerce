@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>Thêm địa chỉ mới</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Street</label>
+            <input type="text" name="street" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>City</label>
+            <input type="text" name="city" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>State</label>
+            <input type="text" name="state" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Zip code</label>
+            <input type="text" name="zip_code" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Phone</label>
+            <input type="text" name="phone" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Lưu địa chỉ</button>
+    </form>
+</div>
+{% endblock %}

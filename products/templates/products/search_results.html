@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h4>Kết quả tìm kiếm cho: "{{ query }}"</h4>
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-2">
+                    <a href="{% url 'product_detail' pk=product.id %}" class="text-decoration-none text-dark">
+                        <div style="height: 300px" class="card product-card img-fluid">
+                            <img src="{{ product.picture }}" alt="{{ product.name }}" class="card-img-top img-fluid">
+                            <div class="card-body product-body">
+                                <h6 style="width: 150px; height: 30px" class="card-title product-title">{{ product.name }}</h6>
+                                <p style="font-size: 12px; color: red; height: 30px" class="card-text product-price">{{ product.price }}</p>
+                                {% if product.status %}
+                                    <span class="badge rounded-pill product-badge">{{ product.get_status_display }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <p>Không tìm thấy sản phẩm phù hợp.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
