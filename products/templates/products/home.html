@@ -310,25 +310,23 @@ Trang chủ - WebBanHang
          <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4" id="product-list">
               {% for Product in products %}
               <div class="col product" style="display: {% if forloop.counter <= 24 %} block {% else %} none {% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:1 }}00">
-
-                <a href="{% url 'product_detail' pk=Product.id %}" class="text-decoration-none text-dark">
-                  <div class="product_info">
-                    <div class="anh" style="height: 200px; overflow: hidden;">
-                      <img src="{{ Product.picture }}" class="picture" style="max-height: 100%; object-fit: contain;" alt="{{ Product.name }}">
-                    </div>
-                    <div class="body">
-                        <h5>{{ Product.type }}</h5>
-                      <h6 class="name">{{ Product.name }}</h6>
-                      <p class="quantity">Còn: {{ Product.quantity }}</p>
-                        <div class="price_tong">
-                            <p class="price">${{ Product.price|floatformat:0|add:"0"|intcomma }}<del style="color: #676767; margin-left: 5px; font-weight: 100">$24</del></p>
-                            <a href="{% url 'product_detail' pk=Product.id %}" class="price_add">More</a>
-                        </div>
-                    </div>
-
+                  <div class="product-card-custom h-100 d-flex flex-column">
+                      <div class="product-image-custom">
+                          <div class="img-frame">
+                              <img src="{{ Product.picture }}" alt="{{ Product.name }}">
+                          </div>
+                      </div>
+                      <div class="product-info-custom flex-grow-1 d-flex flex-column align-items-center">
+                          <span class="product-category-custom">{{ Product.type }}</span>
+                          <h3 class="product-title-custom">{{ Product.name }}</h3>
+                          <div class="product-stock-custom">Còn: <b>{{ Product.quantity }}</b></div>
+                          <div class="product-pricing-custom">
+                              <span class="product-price-custom">${{ Product.price|floatformat:0|add:"0"|intcomma }}</span>
+                              <span class="product-old-price-custom">$24</span>
+                          </div>
+                          <a href="{% url 'product_detail' pk=Product.id %}" class="product-more-btn-custom mt-auto">More</a>
+                      </div>
                   </div>
-                </a>
-
               </div>
               {% endfor %}
             </div>
