@@ -307,24 +307,22 @@ Trang chủ - WebBanHang
         <div class="container my-5">
           <h4 class="text-danger fw-bold mb-4 text-center" data-aos="fade-down">GỢI Ý HÔM NAY</h4>
 
-         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4" id="product-list">
+         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 align-items-stretch" id="product-list">
               {% for Product in products %}
               <div class="col product" style="display: {% if forloop.counter <= 24 %} block {% else %} none {% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:1 }}00">
-                  <div class="product-card-custom h-100 d-flex flex-column">
-                      <div class="product-image-custom">
-                          <div class="img-frame">
-                              <img src="{{ Product.picture }}" alt="{{ Product.name }}">
-                          </div>
+                  <div class="product-card-modern h-100 d-flex flex-column shadow-sm">
+                      <div class="product-img-modern d-flex align-items-center justify-content-center">
+                          <img src="{{ Product.picture }}" alt="{{ Product.name }}">
                       </div>
-                      <div class="product-info-custom flex-grow-1 d-flex flex-column align-items-center">
-                          <span class="product-category-custom">{{ Product.type }}</span>
-                          <h3 class="product-title-custom">{{ Product.name }}</h3>
-                          <div class="product-stock-custom">Còn: <b>{{ Product.quantity }}</b></div>
-                          <div class="product-pricing-custom">
-                              <span class="product-price-custom">${{ Product.price|floatformat:0|add:"0"|intcomma }}</span>
-                              <span class="product-old-price-custom">$24</span>
+                      <div class="product-info-modern flex-grow-1 d-flex flex-column align-items-center p-2">
+                          <span class="product-type-modern">{{ Product.type }}</span>
+                          <h3 class="product-name-modern text-center">{{ Product.name }}</h3>
+                          <div class="product-qty-modern">Còn: <b>{{ Product.quantity }}</b></div>
+                          <div class="product-price-group-modern mb-2">
+                              <span class="product-price-modern">${{ Product.price|floatformat:0|add:"0"|intcomma }}</span>
+                              <span class="product-old-price-modern">$24</span>
                           </div>
-                          <a href="{% url 'product_detail' pk=Product.id %}" class="product-more-btn-custom mt-auto">More</a>
+                          <a href="{% url 'product_detail' pk=Product.id %}" class="btn btn-success w-100 mt-auto">More</a>
                       </div>
                   </div>
               </div>
